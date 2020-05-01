@@ -71,5 +71,18 @@ namespace NomadCodeTestBusiness
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task SaveVehicleImage(Guid id, Guid vehicleId, byte[] content)
+        {
+            var item = await _context.VehicleImages.Where(x => x.Id == id).FirstOrDefaultAsync();
+            if (item == null)
+            {
+                item = new VehicleImageEntity { Id = id, VehicleId = vehicleId };
+                _context.VehicleImages.Add(item);
+            }
+
+            item.Content = content;
+            await _context.SaveChangesAsync();
+        }
     }
 }

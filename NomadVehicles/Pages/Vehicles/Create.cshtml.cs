@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NomadCodeTestBusiness;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace NomadVehicles.Pages.Vehicles
 {
     public class CreateModel : PageModel
     {
         private readonly IVehicleManager _manager;
+
         public CreateModel(IVehicleManager manager)
         {
             _manager = manager;
@@ -38,9 +41,31 @@ namespace NomadVehicles.Pages.Vehicles
                 return Page();
             }
 
-            await _manager.SaveVehicle(Vehicle.Id, Vehicle.Name, Vehicle.VehicleTypeId);
+            var files = Vehicle.FormFiles;
+            var vehicleImages = await GetImagesFromStream(files);
+
+            await _manager.SaveVehicle(Vehicle.Id, Vehicle.Name, Vehicle.VehicleTypeId, vehicleImages);
 
             return RedirectToPage("./Index");
+        }
+
+        public static async Task<List<byte[]>> GetImagesFromStream(List<IFormFile> files)
+        {
+            List<byte[]> result = null;
+            if (files != null)
+            {
+                result = new List<byte[]>();
+                foreach (var file in files)
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        await file.CopyToAsync(stream);
+                        var content = stream.ToArray();
+                        result.Add(content);
+                    }
+                }
+            }
+            return result;
         }
     }
 }

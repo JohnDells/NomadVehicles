@@ -33,9 +33,17 @@ namespace NomadCodeTestBusiness
             return await _repository.GetVehicle(id);
         }
 
-        public async Task SaveVehicle(Guid id, string name, Guid vehicleTypeId)
+        public async Task SaveVehicle(Guid id, string name, Guid vehicleTypeId, List<byte[]> images)
         {
             await _repository.SaveVehicle(id, name, vehicleTypeId);
+
+            if (images != null)
+            {
+                foreach (var image in images)
+                {
+                    await _repository.SaveVehicleImage(Guid.NewGuid(), id, image);
+                }
+            }
         }
 
         public async Task DeleteVehicle(Guid id)

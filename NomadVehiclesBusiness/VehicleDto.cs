@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace NomadCodeTestBusiness
@@ -18,5 +20,7 @@ namespace NomadCodeTestBusiness
         public string VehicleTypeName { get; set; }
 
         public Guid? VehicleImageId { get; set; }
+
+        public List<IFormFile> FormFiles { get; set; }
     }
 }

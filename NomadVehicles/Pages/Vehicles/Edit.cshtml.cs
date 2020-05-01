@@ -50,7 +50,7 @@ namespace NomadVehicles.Pages.Vehicles
                 return Page();
             }
 
-            await _manager.SaveVehicle(Vehicle.Id, Vehicle.Name, Vehicle.VehicleTypeId);
+            await _manager.SaveVehicle(Vehicle.Id, Vehicle.Name, Vehicle.VehicleTypeId, null);
 
             return RedirectToPage("./Index");
         }
