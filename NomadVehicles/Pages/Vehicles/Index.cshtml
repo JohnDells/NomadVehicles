@@ -1,0 +1,76 @@
+﻿@page
+@model NomadVehicles.Pages.Vehicles.IndexModel
+@{
+    ViewData["Title"] = "Vehicles";
+}
+
+<h1>Vehicles</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<form>
+    <p>
+        Name: <input type="text" asp-for="SearchString" />
+        <input type="submit" value="Filter" class="btn btn-primary" />
+    </p>
+</form>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Vehicles[0].Name)
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Vehicles)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a> 
+                    <form method="post" style="display:inline">
+                        <button type="submit" asp-page-handler="delete" asp-route-id="@item.Id" class="btn btn-primary">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td>
+                Page @(Model.PageNumber) of @(Model.PageCount)
+                <div style="display:inline; padding-left: 100px;">
+                    @{
+                        if (Model.PageNumber > 2)
+                        {
+                            var first = new Dictionary<string, string> { { "PageNumber", "1" } };
+                            <a asp-area="" asp-page="./Index" asp-all-route-data="first" class="btn btn-primary">First</a>
+                        }
+                        if (Model.PageNumber > 1)
+                        {
+                            var previous = new Dictionary<string, string> { { "PageNumber", (Model.PageNumber - 1).ToString() } };
+                            <a asp-area="" asp-page="./Index" asp-all-route-data="previous" class="btn btn-primary">Previous</a>
+                        }
+                        if (Model.PageNumber < Model.PageCount)
+                        {
+                            var next = new Dictionary<string, string> { { "PageNumber", (Model.PageNumber + 1).ToString() } };
+                            <a asp-area="" asp-page="./Index" asp-all-route-data="next" class="btn btn-primary">Next</a>
+                        }
+                        if (Model.PageNumber < Model.PageCount - 1)
+                        {
+                            var last = new Dictionary<string, string> { { "PageNumber", (Model.PageCount).ToString() } };
+                            <a asp-area="" asp-page=".Index" asp-all-route-data="last" class="btn btn-primary">Last</a>
+                        }
+                    }
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
