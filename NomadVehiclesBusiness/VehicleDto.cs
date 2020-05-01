@@ -19,7 +19,7 @@ namespace NomadCodeTestBusiness
 
         public string VehicleTypeName { get; set; }
 
-        public Guid? VehicleImageId { get; set; }
+        public List<Guid> VehicleImageIds { get; set; }
 
         public List<IFormFile> FormFiles { get; set; }
     }

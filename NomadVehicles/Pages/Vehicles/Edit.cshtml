@@ -24,6 +24,19 @@
                 <span asp-validation-for="Vehicle.VehicleTypeId" class="text-danger"></span>
             </div>
             <div class="form-group">
+                @if (Model.Vehicle.VehicleImageIds != null && Model.Vehicle.VehicleImageIds.Count > 0)
+                {
+                    foreach (var imageId in Model.Vehicle.VehicleImageIds)
+                    {
+                        <img src="~/VehicleImage/Index/@imageId" class="vehicle-list-image" />
+                    }
+                }
+                else
+                {
+                    <span>&nbsp;</span>
+                }
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>

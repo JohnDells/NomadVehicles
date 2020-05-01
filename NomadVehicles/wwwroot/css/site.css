@@ -69,3 +69,22 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+.vehicle-list-name {
+    width: 300px;
+}
+
+.vehicle-list-item {
+    height: 300px;
+    text-align: left;
+}
+
+.vehicle-list-image {
+    width: auto;
+    height: 100%;
+}
+
+.vehicle-list-pager {
+    display: inline;
+    padding-left: 100px;
+}

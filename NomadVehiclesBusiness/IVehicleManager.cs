@@ -17,5 +17,7 @@ namespace NomadCodeTestBusiness
         Task SaveVehicle(Guid id, string name, Guid vehicleTypeId, List<byte[]> images);
 
         Task DeleteVehicle(Guid id);
+
+        Task<byte[]> GetVehicleImage(Guid id);
     }
 }

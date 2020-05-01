@@ -39,12 +39,12 @@ namespace NomadCodeTestBusiness
                 query = query.Where(x => x.Name.StartsWith(startsWith));
             }
 
-            return await query.OrderBy(x => x.Name).Skip(skip).Take(take).Select(x => new VehicleDto { Id = x.Id, Name = x.Name, VehicleTypeName = x.VehicleType.Name, VehicleImageId = x.VehicleImages.Select(y => y.Id).FirstOrDefault() }).ToListAsync();
+            return await query.OrderBy(x => x.Name).Skip(skip).Take(take).Select(x => new VehicleDto { Id = x.Id, Name = x.Name, VehicleTypeName = x.VehicleType.Name, VehicleImageIds = x.VehicleImages.Select(y => y.Id).ToList() }).ToListAsync();
         }
 
         public async Task<VehicleDto> GetVehicle(Guid id)
         {
-            return await _context.Vehicles.Where(x => x.Id == id).Select(x => new VehicleDto { Id = x.Id, Name = x.Name, VehicleTypeId = x.VehicleTypeId }).FirstOrDefaultAsync();
+            return await _context.Vehicles.Where(x => x.Id == id).Select(x => new VehicleDto { Id = x.Id, Name = x.Name, VehicleTypeId = x.VehicleTypeId, VehicleImageIds = x.VehicleImages.Select(y => y.Id).ToList() }).FirstOrDefaultAsync();
         }
 
         public async Task SaveVehicle(Guid id, string name, Guid vehicleTypeId)
@@ -64,6 +64,16 @@ namespace NomadCodeTestBusiness
 
         public async Task DeleteVehicle(Guid id)
         {
+            var vehicleImages = await _context.VehicleImages.Where(x => x.VehicleId == id).ToListAsync();
+            if (vehicleImages != null)
+            {
+                foreach (var vehicleImage in vehicleImages)
+                {
+                    _context.VehicleImages.Remove(vehicleImage);
+                }
+                await _context.SaveChangesAsync();
+            }
+
             var item = await _context.Vehicles.Where(x => x.Id == id).FirstOrDefaultAsync();
             if (item != null)
             {
@@ -83,6 +93,11 @@ namespace NomadCodeTestBusiness
 
             item.Content = content;
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<byte[]> GetVehicleImage(Guid id)
+        {
+            return await _context.VehicleImages.Where(x => x.Id == id).Select(x => x.Content).FirstOrDefaultAsync();
         }
     }
 }

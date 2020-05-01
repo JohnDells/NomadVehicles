@@ -50,5 +50,10 @@ namespace NomadCodeTestBusiness
         {
             await _repository.DeleteVehicle(id);
         }
+
+        public async Task<byte[]> GetVehicleImage(Guid id)
+        {
+            return await _repository.GetVehicleImage(id);
+        }
     }
 }
